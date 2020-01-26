@@ -1,0 +1,60 @@
+import random
+import timeit
+import sys
+
+size1=1000000 #размерность списка (
+size2=10000 #размерность списка,
+size3=100000 #размерность списка
+size4=1000000 #размерность списка
+sizeNeedle = 1000 #объем иголок в штуках
+int_count=0	#количесвто иголок в стоге
+listStok = []	#list стог
+listNeedle =[]	#list иголки
+tupleStok = ()	#tuple стог
+tupleNeedle =()	#tuple иголки
+dictStok = ()	#dict стог
+dictNeedle =()	#dict иголки
+#Вариант с использованием списков List
+for x in range(size1):	#заполняем стог случаными элементами
+	listStok.append(random.random())
+
+for x in range(int(sizeNeedle/2)): #заполняем иголки элементами из стога
+	listNeedle.append(listStok[x])
+
+for x in range(int(sizeNeedle/2)):	#заполняем стог случайными значениями
+	listNeedle.append(random.random())
+
+time_start = timeit.default_timer()
+size_in_bytes = sys.getsizeof(listStok)  # размер в байтах стога
+for x in range(size1):		#поиск иголок в стоге
+	for y in range(sizeNeedle):
+		if listNeedle[y]==listStok[x]:
+			int_count=int_count+1
+time_end = timeit.default_timer()-time_start
+print ("Тип данных:", type(listStok), "N=", size1, "T=", time_end, "Размер в байтах=",size_in_bytes, " count =", int_count)
+
+#Вариант с использованием списков tuple
+int_count = 0
+tupleStok = tuple(listStok)
+tupleNeedle = tuple(listNeedle)
+time_start = timeit.default_timer()
+size_in_bytes = sys.getsizeof(tupleStok)  # размер в байтах стога
+for x in tupleStok:		#поиск иголок в стоге
+	for y in tupleNeedle:
+		if x==y:
+			int_count=int_count+1
+time_end = timeit.default_timer()-time_start
+print ("Тип данных:", type(tupleStok), "N=", size1, "T=", time_end, "Размер в байтах=",size_in_bytes, " count =", int_count)
+
+#Вариант с использованием dict
+int_count = 0
+dictStok = dict.fromkeys(listStok, 1)
+dictNeedle = dict.fromkeys(listNeedle, 1)
+
+time_start = timeit.default_timer()
+size_in_bytes = sys.getsizeof(dictStok)  # размер в байтах стога
+for key in dictNeedle:
+		if key in dictStok:
+			int_count=int_count+1
+time_end = timeit.default_timer()-time_start
+print ("Тип данных:", type(dictStok), "N=", size1, "T=", time_end, "Размер в байтах=",size_in_bytes, " count =", int_count)
